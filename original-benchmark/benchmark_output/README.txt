@@ -1,0 +1,1 @@
+The generated benchmark running result for the specific machines will be output to this folder.
