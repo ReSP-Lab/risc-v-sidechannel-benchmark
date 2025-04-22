@@ -1,4 +1,4 @@
-# Cache Timing Vulnerabilities on RISC-V Processors
+# Systematic Assessment of Cache Timing Vulnerabilities on RISC-V Processors
 
 This repository contains the translated benchmark suite used for our
 submission to ESORICS 2025.
