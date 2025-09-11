@@ -24,7 +24,7 @@
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import (AutoMinorLocator, MultipleLocator)
+from matplotlib.ticker import (AutoMinorLocator, MultipleLocator, FixedLocator)
 import numpy as np
 import seaborn as sns
 import sys
@@ -323,28 +323,53 @@ if __name__ == "__main__":
     ncolors = len(config_mapping.values())
     custom_palette = [ palette(i/(ncolors-1))
                 for i in range(0, ncolors) ]
+
+    # When SMT is not enabled, useless to consider it
+    sub_table = table[table[CONFIG_LABEL].str.endswith("_TS")]
+    #sub_config_mapping = {
+    #        1: "RF_RF_RF_TS", 3: "RF_RF_W_TS",
+    #        5: "RF_W_RF_TS", 7: "RF_W_W_TS",
+    #        9: "W_RF_RF_TS", 11: "W_RF_W_TS",
+    #        13: "W_W_RF_TS", 15: "W_W_W_TS",
+    #}
+    sub_table[CONFIG_LABEL] = sub_table[CONFIG_LABEL].str.replace(
+            "_TS", "", regex=False)
+    sub_config_mapping = {
+            1: "RF_RF_RF", 3: "RF_RF_W",
+            5: "RF_W_RF", 7: "RF_W_W",
+            9: "W_RF_RF", 11: "W_RF_W",
+            13: "W_W_RF", 15: "W_W_W",
+    }
     sns.swarmplot(
             x="Vulnerability", y=CPU_LABEL,
-            data=table,
+            #data=table,
+            data=sub_table,
             hue=CONFIG_LABEL,
-            hue_order=config_mapping.values(),
+            #hue_order=config_mapping.values(),
+            hue_order=sub_config_mapping.values(),
             dodge=True,
             order = [
                 *CPU_LIST,
-                AND_CPU_NAME,
-                NONE_CPU_NAME,
+                #AND_CPU_NAME,
+                #NONE_CPU_NAME,
             ],
             orient='h', ax=ax,
-            palette=custom_palette,
+            palette=custom_palette[::2],
     )
 
-    plt.axvline(x=44.5, color='black', lw=0.75, alpha=0.5)
+    # Optional separation on 3rd step: access (left) or invalidation (right)
+    #plt.axvline(x=44.5, color='black', lw=0.75, alpha=0.5)
     x_label = "Vulnerability"
     y_label = CPU_LABEL
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
-    ax.xaxis.set_major_locator(MultipleLocator(5))
-    ax.xaxis.set_minor_locator(AutoMinorLocator(5))
+    fixed_loc = np.array([1, *np.arange(5,87,5), 88])
+    ax.xaxis.set_major_locator(FixedLocator(fixed_loc))
+    minors = np.setdiff1d(np.arange(0, 88), fixed_loc)
+    ax.xaxis.set_minor_locator(FixedLocator(minors))
+    ax.set_xlim(0, 89)
+    #ax.xaxis.set_major_locator(MultipleLocator(5))
+    #ax.xaxis.set_minor_locator(AutoMinorLocator(5))
     ax.grid(which='major', color='#CCCCCC', linestyle='--')
     ax.grid(which='minor', color='#CCCCCC', linestyle=':')
     sns.move_legend(
