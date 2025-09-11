@@ -44,11 +44,11 @@
 #define L2_L 1
 
 /* CPU definitions */
-#define LOCAL_CPU1  0
-#define LOCAL_CPU2  0
+#define LOCAL_CPU1  1
+#define LOCAL_CPU2  1
 #define REMOTE_CPU1 2
 #define REMOTE_CPU2 2
-#define REST_CPU    1
+#define REST_CPU    3
 
 #define MULTICORE
 

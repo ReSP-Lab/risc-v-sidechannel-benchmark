@@ -28,7 +28,7 @@ target_name=$1
 output_name=$2
 
 i=0
-for file in `find . -name '*AccOne*AccTwo*AccThr*' | sed 's_./__' | sort -n`
+for file in `find . -name '*AccOne*AccTwo*AccThr*' | grep $target_name | sed 's_./__' | sort -n`
 do
   echo "i is $i"
   let i=$i+1

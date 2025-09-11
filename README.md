@@ -78,3 +78,16 @@ To evaluate the existing vulnerabilities, you have to:
 8. download the output folder;
 9. adapt the CPU list in `scripts/plot_benchmark.py` and plot the results with `python scripts/plot_benchmark.py`.
 
+
+## Images used with experiments for ESORICS 2025 submission
+
+BeagleV Ahead:
+- BeagleBoard.org Ubuntu 23.04 Xfce Image 2023-07-05
+- Linux 5.10.113-g52fbe8443ea1-dirty riscv64
+BeagleV Fire:
+- BeagleBoard.org Ubuntu 23.04 Console Image 2023-10-19
+- Linux 6.1.33-linux4microchip+fpga-2023.06-20231019+ riscv64
+BeagleV Ahead:
+- Ubuntu Jammy Jellyfish 22.04 (development branch)
+- Linux 5.15.0-1004-generic riscv64
+

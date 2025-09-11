@@ -18,9 +18,9 @@ evict-unmatched:
 	$(GCC) $(INCLUDE) $(CFLAGS) $(EVICT_SRC) $(TARGET) -o eviction_histogram
 
 # template
-histogram-template: TARGET=-DBOARD=
-	mkdir -p histogram_output
-	$(GCC) $(INCLUDE) $(CFLAGS) $(HIST_SRC) $(TARGET) -o timing_histogram
+#histogram-template: TARGET=-DBOARD=
+#	mkdir -p histogram_output
+#	$(GCC) $(INCLUDE) $(CFLAGS) $(HIST_SRC) $(TARGET) -o timing_histogram
 
 histogram-unmatched: TARGET=-DBOARD=UNMATCHED
 histogram-unmatched:
@@ -39,10 +39,10 @@ histogram-fire:
 
 
 # template
-benchmark-template: TARGET=
-	mkdir -p benchmark_output
-	$(GCC) $(INCLUDE) $(CFLAGS) $(BENCH_SRC) -DBOARD=$(TARGET) -o generate_compilation_commands_$(TARGET)
-	./generate_compilation_commands_$(TARGET) -m $(TARGET)
+#benchmark-template: TARGET=
+#	mkdir -p benchmark_output
+#	$(GCC) $(INCLUDE) $(CFLAGS) $(BENCH_SRC) -DBOARD=$(TARGET) -o generate_compilation_commands_$(TARGET)
+#	./generate_compilation_commands_$(TARGET) -m $(TARGET)
 
 benchmark-unmatched: TARGET=UNMATCHED
 benchmark-unmatched:
