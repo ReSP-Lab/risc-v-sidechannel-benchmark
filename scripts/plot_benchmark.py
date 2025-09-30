@@ -326,12 +326,6 @@ if __name__ == "__main__":
 
     # When SMT is not enabled, useless to consider it
     sub_table = table[table[CONFIG_LABEL].str.endswith("_TS")]
-    #sub_config_mapping = {
-    #        1: "RF_RF_RF_TS", 3: "RF_RF_W_TS",
-    #        5: "RF_W_RF_TS", 7: "RF_W_W_TS",
-    #        9: "W_RF_RF_TS", 11: "W_RF_W_TS",
-    #        13: "W_W_RF_TS", 15: "W_W_W_TS",
-    #}
     sub_table[CONFIG_LABEL] = sub_table[CONFIG_LABEL].str.replace(
             "_TS", "", regex=False)
     sub_config_mapping = {
@@ -398,7 +392,21 @@ if __name__ == "__main__":
             table.loc[table[CPU_LABEL] == NONE_CPU_NAME, "All"]
     table = table.drop(CONFIG_LABEL, axis=1)
     table = table.drop("All", axis=1)
+    compressed_table = table.copy()
     table = table[table["Result"] > 0]
+
+    all_but_none_index =\
+        np.logical_and(compressed_table[CPU_LABEL]!=NONE_CPU_NAME,
+                compressed_table[CPU_LABEL]!=AND_CPU_NAME)
+    and_results = compressed_table[all_but_none_index].groupby(
+            ["Vulnerability"]).agg(
+                    {"Result": 'all'}
+    )
+    compressed_table.loc[compressed_table[CPU_LABEL] == AND_CPU_NAME,
+                         ["Result"]] = and_results.values.tolist()
+
+    print(compressed_table[compressed_table[CPU_LABEL] == AND_CPU_NAME])
+    compressed_table = compressed_table[compressed_table["Result"] > 0]
 
 
     palette = [
@@ -408,7 +416,7 @@ if __name__ == "__main__":
     fig, ax = plt.subplots(figsize=(12, 6))
     sns.swarmplot(
             x="Vulnerability", y=CPU_LABEL,
-            data=table,
+            data=compressed_table,
             order = [
                 *CPU_LIST,
                 AND_CPU_NAME,
@@ -444,7 +452,12 @@ if __name__ == "__main__":
             [CPU_LABEL, "Vulnerability"], as_index=False).agg(
                     {"Result": 'any'}
     )
-    ctvs_dict["All"] = tmp_table[[CPU_LABEL, "Result"]].groupby(
+    _tmp_table = compressed_table[[CPU_LABEL, "Vulnerability", "Result"]
+            ].groupby(
+                [CPU_LABEL, "Vulnerability"], as_index=False).agg(
+                        {"Result": 'any'}
+    )
+    ctvs_dict["All"] = _tmp_table[[CPU_LABEL, "Result"]].groupby(
             [CPU_LABEL], as_index=False).agg(
                     {"Result": 'sum'}
     )
