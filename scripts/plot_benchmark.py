@@ -405,7 +405,6 @@ if __name__ == "__main__":
     compressed_table.loc[compressed_table[CPU_LABEL] == AND_CPU_NAME,
                          ["Result"]] = and_results.values.tolist()
 
-    print(compressed_table[compressed_table[CPU_LABEL] == AND_CPU_NAME])
     compressed_table = compressed_table[compressed_table["Result"] > 0]
 
 
